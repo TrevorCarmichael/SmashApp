@@ -22,15 +22,15 @@
     <v-list nav>
       <v-list-item to="/">
         <v-list-item-icon><v-icon>mdi-home</v-icon></v-list-item-icon>
-        <v-list-title>Home</v-list-title>
+        <v-list-item-title>Home</v-list-item-title>
       </v-list-item>
       <v-list-item to="/Players">
         <v-list-item-icon><v-icon>mdi-account-multiple</v-icon></v-list-item-icon>
-        <v-list-title>Players</v-list-title>
+        <v-list-item-title>Players</v-list-item-title>
       </v-list-item>
       <v-list-item to="/Tournaments">
         <v-list-item-icon><v-icon>mdi-gamepad</v-icon></v-list-item-icon>
-        <v-list-title>Tournaments</v-list-title>
+        <v-list-item-title>Tournaments</v-list-item-title>
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
