@@ -26,5 +26,11 @@ export default new Router({
       meta: {title: 'Tournaments'},
       component: () => import('./views/Tournaments.vue'),
     },
+    {
+      path: '/addtournament',
+      name: 'addtournament',
+      meta: {title: 'Add Tournament'},
+      component: () => import('./views/AddTournament.vue'),
+    },
   ],
 });

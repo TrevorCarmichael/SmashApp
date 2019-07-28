@@ -3,7 +3,7 @@ const {gql} = require('apollo-server');
 module.exports = gql`
 type Query {
     tournaments: [Tournament]
-    tournament(id: ID!): Tournament
+    tournament(slug: String!): Tournament
     sets: [Set]
     eventByID(id: ID!): Event
 }

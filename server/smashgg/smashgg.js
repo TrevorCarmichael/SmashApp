@@ -14,6 +14,7 @@ SmashGG.prototype.getTournamentByName = async function getTournamentByName(name)
                 name
                 state
                 startAt
+                slug
                 events {
                     id
                     name

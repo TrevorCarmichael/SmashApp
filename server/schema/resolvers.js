@@ -14,10 +14,24 @@ module.exports = {
                 });
             });
         },
-        tournament: (_, args) => {
+        tournament: async (_, args) => {
             return new Promise((resolve, reject) => {
-                tournaments.findOne({tournamentID: args.id}, (error, tournament) => {
-                    error ? reject(error) : resolve(tournament);
+                tournaments.findOne({tournamentID: args.slug}, async (error, tournament) => {
+                    if(error || tournament === null){
+                        tournament = await smash.getTournamentByName(args.slug);
+                        console.log("lookup from smashgg");
+                        console.log(tournament);
+                        resolve({
+                            id: tournament.tournament.id,
+                            tournamentID: tournament.tournament.id,
+                            name: tournament.tournament.name,
+                            date: tournament.tournament.startAt,
+                            slug: tournament.tournament.slug
+                        });
+                    } else {
+                        console.log("lookup from DB");
+                        resolve(tournament);
+                    }
                 });
             });
         }, 
@@ -50,7 +64,8 @@ module.exports = {
             let updated_tournament = await tournaments.findOneAndUpdate({tournamentID: tournament.tournament.id}, {
                     tournamentID: tournament.tournament.id,
                     name: tournament.tournament.name,
-                    date: tournament.tournament.startAt
+                    date: tournament.tournament.startAt,
+                    slug: tournament.tournament.slug
                 }, {upsert: true});
 
             let event = await smash.getEventInfo(args.eventID);
