@@ -14,8 +14,8 @@
                 <v-btn v-on:click="step1" color="primary">Continue</v-btn>
             </v-stepper-content>
             <v-stepper-content step="2">
-
-                <v-btn @click="e1=3" color="primary">Continue</v-btn>
+                <v-select :items="tournament.events" label="Select Event" item-text="name" item-value="id"></v-select>
+                <v-btn @click="step2" color="primary">Continue</v-btn>
                 <v-btn text @click="e1=1" color="red">Back</v-btn>
             </v-stepper-content>
             <v-stepper-content step="3">
@@ -52,14 +52,22 @@ export default {
                     name
                     id
                     date
+                    events {
+                        id
+                        name
+                    }
                 }
             }
           `).then((results) => {
-              this.tournament = results;
-              console.log(this.tournament);
-
-              this.e1 = 2;
+                this.tournament = results.tournament;
+                console.log("Testing:");
+                console.log(this.tournament);
+                console.log(this.tournament.events);
+                this.e1 = 2;
           });
+      },
+      step2: function(){
+          
       }
   }
 };

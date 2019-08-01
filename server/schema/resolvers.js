@@ -17,6 +17,7 @@ module.exports = {
         tournament: async (_, args) => {
             return new Promise((resolve, reject) => {
                 tournaments.findOne({tournamentID: args.slug}, async (error, tournament) => {
+                    console.log(tournament);
                     if(error || tournament === null){
                         tournament = await smash.getTournamentByName(args.slug);
                         console.log("lookup from smashgg");
@@ -124,8 +125,16 @@ module.exports = {
     Tournament: {
         events (tournament) {
             return new Promise((resolve, reject) => {
-                events.find({tournamentID: tournament.tournamentID}, (error, events) => {
-                    error ? reject(error) : resolve(events);
+                events.find({tournamentID: tournament.tournamentID}, async (error, eventList) => {
+                    console.log(eventList);
+                    if(error || eventList === null || eventList.length === 0){
+                        console.log("Looking up event via Smash gg");
+                        eventsList = await smash.getTournamentByName(tournament.slug);
+                        resolve(eventsList.tournament.events);
+                    } else {
+                        console.log("Getting event from DB");
+                        resolve(eventList);
+                    }
                 });
             });
         }
