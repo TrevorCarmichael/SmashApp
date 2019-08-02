@@ -50,10 +50,10 @@
 <script>
 
 export default {
-  data(){
+  data() {
     return {
-      drawer: false
-    }
-  }
-}
+      drawer: false,
+    };
+  },
+};
 </script>

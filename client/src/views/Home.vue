@@ -9,8 +9,8 @@ export default {
   components: {
 
   },
-  mounted(){
+  mounted() {
     console.log(process.env.VUE_APP_ENDPOINT);
-  }
+  },
 };
 </script>

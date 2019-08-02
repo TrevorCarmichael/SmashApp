@@ -6,6 +6,9 @@ type Query {
     tournament(slug: String!): Tournament
     sets: [Set]
     eventByID(id: ID!): Event
+    players: [Player]
+    player(name: String!) : Player
+    playersByName(names: [String]) : [Player]
 }
 
 type Mutation {

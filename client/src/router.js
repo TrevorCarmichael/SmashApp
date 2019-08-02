@@ -12,24 +12,24 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home,
-      meta: {title: 'Home'}
+      meta: { title: 'Home' },
     },
     {
       path: '/players',
       name: 'players',
-      meta: {title: 'Players'},
+      meta: { title: 'Players' },
       component: () => import('./views/Players.vue'),
     },
     {
       path: '/tournaments',
       name: 'tournaments',
-      meta: {title: 'Tournaments'},
+      meta: { title: 'Tournaments' },
       component: () => import('./views/Tournaments.vue'),
     },
     {
       path: '/addtournament',
       name: 'addtournament',
-      meta: {title: 'Add Tournament'},
+      meta: { title: 'Add Tournament' },
       component: () => import('./views/AddTournament.vue'),
     },
   ],

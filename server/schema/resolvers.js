@@ -17,7 +17,6 @@ module.exports = {
         tournament: async (_, args) => {
             return new Promise((resolve, reject) => {
                 tournaments.findOne({tournamentID: args.slug}, async (error, tournament) => {
-                    console.log(tournament);
                     if(error || tournament === null){
                         tournament = await smash.getTournamentByName(args.slug);
                         console.log("lookup from smashgg");
@@ -46,6 +45,30 @@ module.exports = {
         eventByID: (_, args) => {
             return new Promise((resolve, reject) => {
                 events.findOne({eventID: args.id}, (error, results) => {
+                    error ? reject(error) : resolve(results);
+                });
+            });
+        },
+        players: (_, args) => {
+            return new Promise((resolve, reject) => {
+                players.find({}, (error, results) => {
+                    console.log('find');
+                    error ? reject(error) : resolve(results);
+                });
+            });
+        },
+        player: (_, args) => {
+            return new Promise((resolve, reject) => {
+                players.findOne({name: args.name}, (error, results) => {
+                    error ? reject(error) : resolve(results);
+                });
+            })
+        },
+        playersByName: (_, args) => {
+            return new Promise((resolve, reject) => {
+                players.find({name: {
+                    $in: args.names
+                }}, (error, results) => {
                     error ? reject(error) : resolve(results);
                 });
             });

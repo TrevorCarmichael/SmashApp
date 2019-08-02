@@ -19,9 +19,9 @@ export default {
 
   },
   mounted() {
-      console.log('hi ' + process.env.VUE_APP_ENDPOINT);
-      
-      queryAPI(`
+    console.log(`hi ${process.env.VUE_APP_ENDPOINT}`);
+
+    queryAPI(`
       query tournament {
           tournaments {
               name
@@ -30,19 +30,19 @@ export default {
           }
       }
       `).then((response) => {
-          this.tournaments = response.tournaments;
-      });
+      this.tournaments = response.tournaments;
+    });
   },
-  data(){
-      return {
-        tournaments: []
-      }
+  data() {
+    return {
+      tournaments: [],
+    };
   },
   methods: {
-      formatDate: (date) => {
-          let tempDate = new Date(date * 1000);
-          return tempDate.toDateString();
-      }
-  }
+    formatDate: (date) => {
+      const tempDate = new Date(date * 1000);
+      return tempDate.toDateString();
+    },
+  },
 };
 </script>

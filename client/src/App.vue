@@ -9,12 +9,12 @@
 </template>
 
 <script>
-import smashNavigation from '@/components/smashNavigation.vue'
+import smashNavigation from '@/components/smashNavigation.vue';
 
 export default {
   name: 'App',
   components: {
-    smashNavigation
+    smashNavigation,
   },
   data: () => ({
     //

@@ -37,16 +37,16 @@ export default {
   mounted() {
 
   },
-  data(){
-      return {
-        e1: 1,
-        tournamentSlug: "",
-        tournament: {}
-      }
+  data() {
+    return {
+      e1: 1,
+      tournamentSlug: '',
+      tournament: {},
+    };
   },
   methods: {
-      step1: function() {
-          queryAPI(`
+    step1() {
+      queryAPI(`
             query tournament {
                 tournament(slug: "${this.tournamentSlug}") {
                     name
@@ -59,16 +59,16 @@ export default {
                 }
             }
           `).then((results) => {
-                this.tournament = results.tournament;
-                console.log("Testing:");
-                console.log(this.tournament);
-                console.log(this.tournament.events);
-                this.e1 = 2;
-          });
-      },
-      step2: function(){
-          
-      }
-  }
+        this.tournament = results.tournament;
+        console.log('Testing:');
+        console.log(this.tournament);
+        console.log(this.tournament.events);
+        this.e1 = 2;
+      });
+    },
+    step2() {
+
+    },
+  },
 };
 </script>
