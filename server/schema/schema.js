@@ -3,33 +3,28 @@ const {gql} = require('apollo-server');
 module.exports = gql`
 type Query {
     tournaments: [Tournament]
-    tournament(slug: String!): Tournament
+    tournament(slug: String, tournamentID: String, eventID: String): Tournament
+
     sets: [Set]
-    eventByID(id: ID!): Event
     players: [Player]
     player(name: String!) : Player
     playersByName(names: [String]) : [Player]
+    getParticipants(eventID: String!) : [Player]
 }
 
 type Mutation {
-    addTournament(tournamentID: String!, name: String!, date: String): Tournament
-    addEvent(eventID: String!, tournamentID: String!, name: String!, participants: [String]): Event
+    addTournament(tournamentID: String!, eventID: String!, eventName: String!, name: String!, date: String!, slug: String!, participants: [PlacementInput]): Tournament
     registerTournamentEvent(tournamentSlug: String!, eventID: Int!): Tournament
 }
 
 type Tournament {
     id: ID!
     tournamentID: String!
+    eventID: String!
+    eventName: String!
     name: String!
     date: String
-    events: [Event]
-}
-
-type Event {
-    id: ID!
-    eventID: String!
-    tournamentID: String!
-    name: String!
+    slug: String
     participants: [Placement]
 }
 
@@ -58,6 +53,11 @@ type Result {
     player: Player!
     name: String!
     score: Int!
+}
+input PlacementInput {
+    player: String!
+    name: String!
+    placement: Int!
 }
 
 input ResultInput {
