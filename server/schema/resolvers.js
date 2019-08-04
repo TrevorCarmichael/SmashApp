@@ -55,15 +55,43 @@ module.exports = {
         }
     },
     Mutation: {
-        addTournament: (_, args) => {
-            return tournaments.create(args);
+        addTournament: async (_, {slug, eventID}) => {
+            let tournament = await smash.getTournamentByName(slug);
+            let event = tournament.events.length === 1 || eventID === undefined 
+                ? tournament.events[0] : tournament.events.find((x) => x.id === eventID);
+
+            let participants = await smash.getEventStandings(event.id);
+
+            let updatedParticipants = await Promise.all(participants.map(async (x) => {
+                let name = x.entrant.participants[0].gamerTag;
+                let newPlayer = await players.findOneAndUpdate({name: name}, {name: name}, {upsert: true, new: true});
+                return {
+                    playerID: newPlayer.id,
+                    name: newPlayer.name,
+                    placement: x.placement
+                };
+            }));
+
+            return await tournaments.findOneAndUpdate({
+                tournamentID: tournament.id
+            },{
+                tournamentID: tournament.id,
+                eventID: event.id,
+                eventName: event.name,
+                name: tournament.name,
+                date: tournament.startAt,
+                slug: tournament.slug,
+                participants: updatedParticipants
+            }, {upsert: true, new: true});
         },
     },
-
+    Tournament: {
+        
+    },
     Placement: {
-        player (placement) {
+        async player (placement) {
             return new Promise((resolve, reject) => {
-                players.findById(placement.player, (error, result) => {
+                players.findById(placement.playerID, (error, result) => {
                     error ? reject(error) : resolve(result);
                 });
             });

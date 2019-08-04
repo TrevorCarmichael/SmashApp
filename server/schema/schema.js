@@ -13,7 +13,7 @@ type Query {
 }
 
 type Mutation {
-    addTournament(tournamentID: String!, eventID: String!, eventName: String!, name: String!, date: String!, slug: String!, participants: [PlacementInput]): Tournament
+    addTournament(slug: String!, eventID: Int): Tournament
     registerTournamentEvent(tournamentSlug: String!, eventID: Int!): Tournament
 }
 

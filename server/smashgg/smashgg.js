@@ -29,7 +29,7 @@ SmashGG.prototype.getTournamentByName = async function getTournamentByName(name)
         }
     `;
 
-    return this._fetch.queryAPI(query, variables);
+    return (await this._fetch.queryAPI(query, variables)).tournament;
 }
 
 SmashGG.prototype.getEventEntrants = async function getEventEntrants(eventID, perPage = 50) {
