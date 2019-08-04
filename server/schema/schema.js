@@ -14,6 +14,7 @@ type Query {
 
 type Mutation {
     addTournament(slug: String!, eventID: Int): Tournament
+    addSets(eventID: Int!): [Set]
     registerTournamentEvent(tournamentSlug: String!, eventID: Int!): Tournament
 }
 
@@ -26,6 +27,7 @@ type Tournament {
     date: String
     slug: String
     participants: [Placement]
+    sets: [Set]
 }
 
 type Placement {

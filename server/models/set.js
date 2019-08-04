@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const setSchema = new Schema({
-    id: String,
     setID: String,
     eventID: String,
     winnerID: String,
@@ -11,7 +10,7 @@ const setSchema = new Schema({
     loserName: String,
     DQ: Boolean,
     results: [{
-        player: String,
+        playerID: String,
         name: String,
         score: Number
     }]

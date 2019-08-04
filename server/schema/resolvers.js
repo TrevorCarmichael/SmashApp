@@ -72,6 +72,8 @@ module.exports = {
                 };
             }));
 
+            addSets(event.id);
+
             return await tournaments.findOneAndUpdate({
                 tournamentID: tournament.id
             },{
@@ -84,12 +86,21 @@ module.exports = {
                 participants: updatedParticipants
             }, {upsert: true, new: true});
         },
+        addSets: (_, {eventID}) => {return addSets(eventID)}
     },
     Tournament: {
-        
+        sets(tournament) {
+            return new Promise((resolve, reject) => {
+                sets.find({
+                    eventID: tournament.eventID
+                }, (error, results) => {
+                    error ? reject(error) : resolve(results);
+                });
+            });
+        }
     },
     Placement: {
-        async player (placement) {
+        player (placement) {
             return new Promise((resolve, reject) => {
                 players.findById(placement.playerID, (error, result) => {
                     error ? reject(error) : resolve(result);
@@ -98,3 +109,48 @@ module.exports = {
         }
     }
 };
+
+getPlayerByGamerTag = async (x) => await players.findOne({name: x});
+
+async function addSets(eventID) {
+    let eventSets = await smash.getEventSets(eventID);
+    let addedSets = await Promise.all(eventSets.map(async (set) => {
+        let results = [];
+        let winner, loser;
+
+        winnerPromise = getPlayerByGamerTag(set.winner.entrant.participants[0].gamerTag).then((x) => {
+            winner = {
+                playerID: x._id,
+                name: x.name,
+                score: set.winnerScore
+             };
+            results.push(winner);
+        });
+
+        loserPromise = getPlayerByGamerTag(set.loser.entrant.participants[0].gamerTag).then((x) => {
+            loser = {
+                playerID: x._id,
+                name: x.name,
+                score: set.loserScore
+             };
+            results.push(loser);
+        });
+
+        await Promise.all([winnerPromise, loserPromise]);        
+
+        return await sets.findOneAndUpdate({setID: set.id}, {
+            setID: set.id,
+            eventID: eventID,
+            winnerID: winner.playerID,
+            loserID: loser.playerID,
+            winnerName: winner.name,
+            loserName: loser.name,
+            DQ: set.DQ,
+            results: results
+        }, {upsert: true, new: true});
+        
+    }));
+
+    return addedSets;
+}
+
