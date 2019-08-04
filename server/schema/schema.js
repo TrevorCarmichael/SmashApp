@@ -4,7 +4,7 @@ module.exports = gql`
 type Query {
     tournaments: [Tournament]
     tournament(slug: String, tournamentID: String, eventID: String): Tournament
-
+    tournament_smashgg(slug: String!) : Tournament_SmashGG
     sets: [Set]
     players: [Player]
     player(name: String!) : Player
@@ -19,15 +19,22 @@ type Mutation {
 }
 
 type Tournament {
-    id: ID!
-    tournamentID: String!
-    eventID: String!
+    tournamentID: ID!
+    eventID: ID!
     eventName: String!
     name: String!
-    date: String
+    date: Int
+    formattedDate: String
     slug: String
     participants: [Placement]
     sets: [Set]
+}
+
+type Tournament_SmashGG {
+    tournamentID: ID!
+    name: String!
+    date: Int
+    slug: String
 }
 
 type Placement {
@@ -36,13 +43,11 @@ type Placement {
     placement: Int!
 }
 type Player {
-    id: ID!
     name: String!
 }
 
 type Set {
-    id: ID!
-    eventID: String!
+    eventID: ID!
     winnerID: String!
     loserID: String!
     winnerName: String!

@@ -13,9 +13,8 @@ module.exports = {
                 });
             });
         },
-        tournament: async (_, {tournamentID, eventID, slug}) => {
+        tournament: (_, {tournamentID, eventID, slug}) => {
             return new Promise((resolve, reject) => {
-                console.log(tournamentID);
                 let query = {};
                 if(tournamentID) query.tournamentID = tournamentID;
                 if(eventID) query.eventID = eventID;
@@ -23,6 +22,18 @@ module.exports = {
                 tournaments.findOne(query, (error, results) => { error ? reject(error) : resolve(results)});
             });
         }, 
+        tournament_smashgg: (_, {slug}) => {
+            return new Promise((resolve, reject) => {
+                smash.getTournamentByName(slug).then((results) => {
+                    resolve({
+                        tournamentID: results.id,
+                        name: results.name,
+                        date: results.startAt,
+                        slug: results.slug
+                    });
+                });
+            });
+        },
         sets: () => {
             return new Promise((resolve, reject) => {
                 sets.find({}, (error, results) => {
@@ -97,6 +108,10 @@ module.exports = {
                     error ? reject(error) : resolve(results);
                 });
             });
+        },
+        formattedDate(tournament) {
+            let newDate = new Date(tournament.date*1000);
+            return newDate.toLocaleDateString();
         }
     },
     Placement: {
