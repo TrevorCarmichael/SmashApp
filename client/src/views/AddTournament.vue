@@ -14,7 +14,7 @@
                 <v-btn v-on:click="step1" color="primary">Continue</v-btn>
             </v-stepper-content>
             <v-stepper-content step="2">
-                <v-select :items="tournament.events" label="Select Event" item-text="name" item-value="id"></v-select>
+                <v-select :items="tournament.events" label="Select Event" item-text="name" item-value="id" v-model="selectedEvent"></v-select>
                 <v-btn @click="step2" color="primary">Continue</v-btn>
                 <v-btn text @click="e1=1" color="red">Back</v-btn>
             </v-stepper-content>
@@ -42,6 +42,7 @@ export default {
       e1: 1,
       tournamentSlug: '',
       tournament: {},
+      selectedEvent: ''
     };
   },
   methods: {
@@ -67,7 +68,7 @@ export default {
       });
     },
     step2() {
-
+      console.log(this.selectedEvent);
     },
   },
 };

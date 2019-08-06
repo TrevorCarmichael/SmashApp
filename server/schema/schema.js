@@ -35,6 +35,12 @@ type Tournament_SmashGG {
     name: String!
     date: Int
     slug: String
+    events: [Event_SmashGG]
+}
+
+type Event_SmashGG {
+    id: ID!
+    name: String!
 }
 
 type Placement {

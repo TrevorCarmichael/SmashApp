@@ -29,7 +29,8 @@ module.exports = {
                         tournamentID: results.id,
                         name: results.name,
                         date: results.startAt,
-                        slug: results.slug
+                        slug: results.slug,
+                        events: results.events
                     });
                 });
             });
