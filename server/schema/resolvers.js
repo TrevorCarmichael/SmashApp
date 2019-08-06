@@ -42,9 +42,11 @@ module.exports = {
                 });
             });
         },
-        players: (_, args) => {
+        players: (_, {names}) => {
+            let query = names ? { name: { $in: names } } : {};
+
             return new Promise((resolve, reject) => {
-                players.find({}, (error, results) => {
+                players.find(query, (error, results) => {
                     error ? reject(error) : resolve(results);
                 });
             });
@@ -55,15 +57,6 @@ module.exports = {
                     error ? reject(error) : resolve(results);
                 });
             })
-        },
-        playersByName: (_, {names}) => {
-            return new Promise((resolve, reject) => {
-                players.find({name: {
-                    $in: names
-                }}, (error, results) => {
-                    error ? reject(error) : resolve(results);
-                });
-            });
         },
         entrants_smashgg: (_, {eventID}) => {
             return new Promise((resolve, reject) => {
