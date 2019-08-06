@@ -56,12 +56,19 @@ module.exports = {
                 });
             })
         },
-        playersByName: (_, args) => {
+        playersByName: (_, {names}) => {
             return new Promise((resolve, reject) => {
                 players.find({name: {
-                    $in: args.names
+                    $in: names
                 }}, (error, results) => {
                     error ? reject(error) : resolve(results);
+                });
+            });
+        },
+        entrants_smashgg: (_, {eventID}) => {
+            return new Promise((resolve, reject) => {
+                smash.getEventEntrants(eventID).then((results) => {
+                    resolve(results);
                 });
             });
         }

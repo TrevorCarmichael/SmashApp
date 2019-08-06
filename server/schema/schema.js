@@ -10,6 +10,7 @@ type Query {
     player(name: String!) : Player
     playersByName(names: [String]) : [Player]
     getParticipants(eventID: String!) : [Player]
+    entrants_smashgg(eventID: Int!): [Entrant_SmashGG]
 }
 
 type Mutation {
@@ -39,6 +40,11 @@ type Tournament_SmashGG {
 }
 
 type Event_SmashGG {
+    id: ID!
+    name: String!
+}
+
+type Entrant_SmashGG {
     id: ID!
     name: String!
 }
