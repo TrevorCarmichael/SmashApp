@@ -19,9 +19,31 @@
                 <v-btn text @click="e1=1" color="red">Back</v-btn>
             </v-stepper-content>
             <v-stepper-content step="3">
+  
+                    <v-card max-width="500" class="mx-auto">
+                      <v-list dense>
+                        <v-subheader>Existing Players</v-subheader>
+                        <v-list-item-group>
+                          <v-list-item v-for="(player, i) in existingPlayers" :key="i">
+                            <v-list-item-content><v-list-item-title>{{ player }}</v-list-item-title></v-list-item-content>
+                          </v-list-item>
+                        </v-list-item-group>
+                      </v-list>
+                    </v-card>
 
-                <v-btn @click="e1=1" color="primary">Continue</v-btn>
-                <v-btn text @click="e1=2" color="red">Back</v-btn>
+                    <v-card max-width="500" class="mx-auto my-2">
+                      <v-list dense>
+                        <v-subheader>New Players</v-subheader>
+                        <v-list-item-group>
+                          <v-list-item v-for="(player, i) in missingPlayers" :key="i">
+                            <v-list-item-content><v-list-item-title>{{ player }}</v-list-item-title></v-list-item-content>
+                          </v-list-item>
+                        </v-list-item-group>
+                      </v-list>
+                    </v-card>
+              
+              <v-btn @click="step3" color="primary">Add the Players</v-btn>
+              <v-btn text @click="e1=1" color="red">Reset</v-btn>
             </v-stepper-content>
         </v-stepper-items>
     </v-stepper>
@@ -42,34 +64,78 @@ export default {
       e1: 1,
       tournamentSlug: '',
       tournament: {},
-      selectedEvent: ''
+      selectedEvent: '',
+      entrants: [], 
+      existingPlayers: [],
+      missingPlayers: []
     };
   },
   methods: {
     step1() {
       queryAPI(`
-            query tournament {
-                tournament(slug: "${this.tournamentSlug}") {
-                    name
-                    id
-                    date
-                    events {
-                        id
-                        name
-                    }
-                }
+        query getTournament{
+          tournament_smashgg(slug:"${this.tournamentSlug}"){
+            tournamentID
+            name
+            date
+            events {
+              name
+              id
             }
-          `).then((results) => {
-        this.tournament = results.tournament;
-        console.log('Testing:');
-        console.log(this.tournament);
-        console.log(this.tournament.events);
-        this.e1 = 2;
+            slug
+          }
+        }`).then((results) => {
+          this.tournament = results.tournament_smashgg;
+          this.e1 = 2;
       });
     },
-    step2() {
+    async step2() {
       console.log(this.selectedEvent);
+      await queryAPI(`
+        query getEntrants{
+	        entrants_smashgg(eventID:${this.selectedEvent}){
+            id
+    				name
+          }
+        }`).then((results) => {
+          this.entrants = results.entrants_smashgg;
+          this.entrants.sort((x,y) => x.name > y.name ? 1 : -1);          
+        });
+      
+      let userList = this.entrants.map((x) => x.name);
+
+      console.log(JSON.stringify(userList));
+      await queryAPI(`
+        query getPlayers{
+          players(names: ${JSON.stringify(userList)}){
+            name
+          }
+        }`).then( (results) => {
+          this.existingPlayers = results.players;
+        });
+
+      this.existingPlayers = this.existingPlayers.map((x) => x.name.toLowerCase());
+      //userList = userList.map((x) => x.toLowerCase());
+
+      this.missingPlayers = this.entrants.filter((x) => {
+        //console.log(x.name);
+        //console.log(!(x.name in userList));
+        return !(this.existingPlayers.includes(x.name.toLowerCase()))
+      }).map((x) => x.name);
+
+      this.e1 = 3;
     },
+    step3(){
+      queryAPI(`
+        mutation addTournament {
+          addTournament(slug:"${this.tournamentSlug}", eventID: ${this.selectedEvent}){
+            tournamentID
+            eventID
+          }
+        }`).then((results) => {
+          console.log(results);
+        });
+    }
   },
 };
 </script>
