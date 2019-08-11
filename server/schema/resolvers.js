@@ -7,23 +7,24 @@ const playerRankings = require('../models/player_rankings');
 
 const smash = new smashgg(process.env.SMASHGG);
 
+function getRecords (model, func, args) {
+    return new Promise(async (resolve, reject) => {
+        let thing = await func.apply(model, args);
+        resolve(thing);
+    });
+}
+
 module.exports = {
     Query: {
         tournaments: () => {
-            return new Promise((resolve, reject) => {
-                tournaments.find({}, (error, results) => {
-                    error ? reject(error) : resolve(results)
-                });
-            });
+            return getRecords(tournaments, tournaments.find, {});
         },
         tournament: (_, {tournamentID, eventID, slug}) => {
-            return new Promise((resolve, reject) => {
-                let query = {};
-                if(tournamentID) query.tournamentID = tournamentID;
-                if(eventID) query.eventID = eventID;
-                if(slug) query.slug = slug;
-                tournaments.findOne(query, (error, results) => { error ? reject(error) : resolve(results)});
-            });
+            let query = {};
+            if(tournamentID) query.tournamentID = tournamentID;
+            if(eventID) query.eventID = eventID;
+            if(slug) query.slug = slug;
+            return getRecords(tournaments, tournaments.findOne, [query]);
         }, 
         tournament_smashgg: (_, {slug}) => {
             return new Promise((resolve, reject) => {
@@ -39,18 +40,10 @@ module.exports = {
             });
         },
         sets: () => {
-            return new Promise((resolve, reject) => {
-                sets.find({}, (error, results) => {
-                    error ? reject(error) : resolve(results);
-                });
-            });
+            return getRecords(sets, sets.find, [{}]);
         },
         ranking: (_, {id}) => {
-            return new Promise((resolve, reject) => {
-                rankings.findById(id, (error, results) => {
-                    error ? reject(error) : resolve(results);
-                });
-            });
+            return getRecords(rankings, rankings.findById, [id]);
         },
         players: (_, {names}) => {
             let query = names ? { name: { $in: names } } : {};
@@ -127,13 +120,7 @@ module.exports = {
     },
     Tournament: {
         sets(tournament) {
-            return new Promise((resolve, reject) => {
-                sets.find({
-                    eventID: tournament.eventID
-                }, (error, results) => {
-                    error ? reject(error) : resolve(results);
-                });
-            });
+            return getRecords(sets, sets.find, [{eventID: tournament.eventID}]);
         },
         formattedDate(tournament) {
             let newDate = new Date(tournament.date*1000);
@@ -142,22 +129,12 @@ module.exports = {
     },
     Placement: {
         player (placement) {
-            return new Promise((resolve, reject) => {
-                players.findById(placement.playerID, (error, result) => {
-                    error ? reject(error) : resolve(result);
-                });
-            });
+            return getRecords(players, players.findById, [placement.playerID]);
         }
     },
     Ranking: {
         players (ranking) {
-            return new Promise((resolve, reject) => {
-                playerRankings.find({
-                    rankingID: ranking._id
-                }, (error, results) => {
-                    error ? reject(error) : resolve(results);
-                });
-            });
+            return getRecords(playerRankings, playerRankings.find, [{rankingID: ranking._id}]);
         },
         startDate (ranking) {
             let date = new Date(ranking.startDate);
@@ -213,4 +190,3 @@ async function addSets(eventID) {
 
     return addedSets;
 }
-

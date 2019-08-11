@@ -6,7 +6,7 @@ type Query {
     tournament(slug: String, tournamentID: String, eventID: String): Tournament
     tournament_smashgg(slug: String!) : Tournament_SmashGG
     sets: [Set]
-    ranking(id: String!) : [Ranking]
+    ranking(id: String!) : Ranking
     players(names: [String]): [Player]
     player(name: String!) : Player
     getParticipants(eventID: String!) : [Player]
