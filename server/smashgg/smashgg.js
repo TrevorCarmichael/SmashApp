@@ -6,7 +6,6 @@ function SmashGG(API_KEY){
 }
 
 SmashGG.prototype.getTournamentByName = async function getTournamentByName(name) {
-  console.log('test');
   const query = `
         query TournamentQuery($slug: String) {
             tournament(slug: $slug){
@@ -308,7 +307,6 @@ SmashGG.prototype.updatePhaseSeeding = async function updatePhaseSeeding(phaseID
 
   
   let result = await this._fetch.queryAPI(query, variables());
-  console.log(result);
   return result;
 }
 
