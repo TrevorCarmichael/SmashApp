@@ -50,6 +50,9 @@ module.exports = {
         return getRecords(tournaments, tournaments.findOneAndUpdate,
              [{tournamentID: tournamentID}, fields , {upsert: true, new: true}]);
     },
+    getSets: (eventID) => {
+        return getRecords(sets, sets.find, [{eventID: eventID}]);
+    },
     addPlayer: (name) => {
         return getRecords(players, players.findOneAndUpdate, [
             {name_lower: name.toLowerCase()},
@@ -57,7 +60,6 @@ module.exports = {
             {upsert: true, new: true}
         ]);
     },
-
     addSets: async (eventID) => {
         let eventSets = await smash.getEventSets(eventID);
         let addedSets = await Promise.all(eventSets.map(async (set) => {
@@ -98,5 +100,12 @@ module.exports = {
         }));
     
         return addedSets;
+    },
+    addRanking: (name, startDate, endDate) => {
+        return getRecords(rankings, rankings.create, [{
+            name: name,
+            startDate: Date.parse(startDate),
+            endDate: Date.parse(endDate)
+        }]);
     }
 }
