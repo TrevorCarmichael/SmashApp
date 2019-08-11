@@ -15,4 +15,16 @@ const tournamentSchema = new Schema({
     }]
 });
 
+tournamentSchema.statics.getAll = function(){
+    return this.find({});
+}
+
+tournamentSchema.statics.getTournament = function(tournamentID, eventID, slug){
+    let query = {};
+    if(tournamentID) query.tournamentID = tournamentID;
+    if(eventID) query.eventID = eventID;
+    if(slug) query.slug = slug;
+    return this.findOne(query);
+}
+
 module.exports = mongoose.model('tournament', tournamentSchema);

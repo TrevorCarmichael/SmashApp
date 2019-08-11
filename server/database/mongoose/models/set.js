@@ -16,4 +16,11 @@ const setSchema = new Schema({
     }]
 });
 
+setSchema.statics.getAllSets = function() {
+    return this.find({});
+}
+
+setSchema.statics.getByID = function(eventID){
+    return this.find({eventID: eventID});
+}
 module.exports = mongoose.model('set', setSchema);

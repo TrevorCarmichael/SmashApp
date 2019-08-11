@@ -11,4 +11,7 @@ const playerRankingSchema = new Schema({
     final_ranking: Number
 });
 
+playerRankingSchema.statics.getAllByID = function(id) {
+    return this.find({rankingID: id});
+}
 module.exports = mongoose.model('playerRanking', playerRankingSchema);
