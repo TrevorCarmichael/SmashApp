@@ -2,6 +2,9 @@ const tournaments = require('../models/tournament');
 const sets = require('../models/set');
 const players = require('../models/player');
 const smashgg = require('../smashgg/smashgg');
+const rankings = require('../models/rankings');
+const playerRankings = require('../models/player_rankings');
+
 const smash = new smashgg(process.env.SMASHGG);
 
 module.exports = {
@@ -42,6 +45,13 @@ module.exports = {
                 });
             });
         },
+        ranking: (_, {id}) => {
+            return new Promise((resolve, reject) => {
+                rankings.findById(id, (error, results) => {
+                    error ? reject(error) : resolve(results);
+                });
+            });
+        },
         players: (_, {names}) => {
             let query = names ? { name: { $in: names } } : {};
 
@@ -76,7 +86,12 @@ module.exports = {
 
             let updatedParticipants = await Promise.all(participants.map(async (x) => {
                 let name = x.entrant.participants[0].gamerTag;
-                let newPlayer = await players.findOneAndUpdate({name: name}, {name: name}, {upsert: true, new: true});
+                let newPlayer = await players.findOneAndUpdate({
+                    name_lower: name.toLowerCase()
+                }, {
+                    name: name,
+                    name_lower: name.toLowerCase()
+                }, {upsert: true, new: true});
                 return {
                     playerID: newPlayer.id,
                     name: newPlayer.name,
@@ -98,7 +113,17 @@ module.exports = {
                 participants: updatedParticipants
             }, {upsert: true, new: true});
         },
-        addSets: (_, {eventID}) => {return addSets(eventID)}
+        addSets: (_, {eventID}) => {return addSets(eventID)},
+        addRanking: async (_, {name, startDate, endDate}) => {
+            let ranking =  await rankings.create({
+                name: name,
+                startDate: Date.parse(startDate),
+                endDate: Date.parse(endDate)
+            });
+
+            console.log(ranking);
+            return ranking;
+        }
     },
     Tournament: {
         sets(tournament) {
@@ -122,6 +147,25 @@ module.exports = {
                     error ? reject(error) : resolve(result);
                 });
             });
+        }
+    },
+    Ranking: {
+        players (ranking) {
+            return new Promise((resolve, reject) => {
+                playerRankings.find({
+                    rankingID: ranking._id
+                }, (error, results) => {
+                    error ? reject(error) : resolve(results);
+                });
+            });
+        },
+        startDate (ranking) {
+            let date = new Date(ranking.startDate);
+            return date.toDateString();
+        },
+        endDate (ranking) {
+            let date = new Date(ranking.endDate);
+            return date.toDateString();
         }
     }
 };
