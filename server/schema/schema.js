@@ -7,6 +7,7 @@ type Query {
     tournament_smashgg(slug: String!) : Tournament_SmashGG
     sets: [Set]
     ranking(id: String!) : Ranking
+    rankings: [Ranking]
     players(names: [String]): [Player]
     player(name: String!) : Player
     getParticipants(eventID: String!) : [Player]
@@ -18,6 +19,7 @@ type Mutation {
     addSets(eventID: Int!): [Set]
     addRanking(name: String!, startDate: String!, endDate: String!) : Ranking
     registerTournamentEvent(tournamentSlug: String!, eventID: Int!): Tournament
+    calculateRanking(id: String!) : Ranking
 }
 
 type Tournament {
@@ -62,6 +64,7 @@ type Player {
 }
 
 type Ranking {
+    id: String!,
     name: String!,
     startDate: String!
     endDate: String! 

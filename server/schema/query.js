@@ -28,6 +28,9 @@ exports.query = {
     ranking: (_, {id}) => {
         return database.getRankingByID(id);
     },
+    rankings: (_, {}) => {
+        return database.getAllRankings();
+    },
     players: (_, {names}) => {
         return database.getPlayersByNames(names);
     },
@@ -60,6 +63,9 @@ exports.placement = {
 };
 
 exports.ranking = {
+    id(ranking) {
+        return ranking._id;
+    },
     players (ranking) {
         return database.getPlayerRankingsByRankingID(ranking._id);
     },
@@ -70,5 +76,11 @@ exports.ranking = {
     endDate (ranking) {
         let date = new Date(ranking.endDate);
         return date.toDateString();
+    }
+}
+
+exports.ranked_players = {
+    final_ranking(ranked_players){
+        return ranked_players.ranking - (2*ranked_players.rating_deviation);
     }
 }

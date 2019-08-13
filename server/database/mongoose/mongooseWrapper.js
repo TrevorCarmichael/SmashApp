@@ -11,6 +11,7 @@ module.exports = {
     getTournament: (tournamentID, eventID, slug) => tournaments.getTournament(tournamentID, eventID, slug),
     getAllSets: () => sets.getAllSets(),
     getRankingByID: (id) => rankings.getByID(id),
+    getAllRankings: () => rankings.getAllRankings(),
     getPlayersByNames: (names) => players.getPlayers(names),
     getPlayerByName: (name) => players.getByName(name),
     getPlayerByID: (id) => players.getByID(id),
@@ -18,6 +19,8 @@ module.exports = {
     addTournament: (tournamentID, fields) => tournaments.addTournament(tournamentID, fields),
     getSets: (eventID) => sets.getByID(eventID),
     addPlayer: (name) => players.addPlayer(name),
+    createPlayerRanking: (playerID, playerName, rankingID, fields) => playerRankings.createNewRanking(playerID, playerName, rankingID, fields),
+    updatePlayerRanking: (playerID, name, rankingID, rating, rating_deviation, volatility) => playerRankings.updatePlayer(playerID, name, rankingID, rating, rating_deviation, volatility),
     addSets: async (eventID) => {
         let eventSets = await smash.getEventSets(eventID);
 

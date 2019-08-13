@@ -15,6 +15,9 @@ rankingSchema.statics.addRanking = function(name, startDate, endDate) {
     });
 };
 
+rankingSchema.statics.getAllRankings = function() {
+    return this.find({});
+}
 rankingSchema.statics.getByID = function(id) {
     return this.findById(id);
 }

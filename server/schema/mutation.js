@@ -37,5 +37,16 @@ module.exports = {
     addSets: (_, {eventID}) => database.addSets(eventID),
     addRanking:  (_, {name, startDate, endDate}) => {
         return database.addRanking(name, startDate, endDate);
+    },
+    calculateRanking: (_, id) => {
+        //1. Get ranking from DB
+        //2. Get tournaments that fall within date
+        //3. Loop through each tournament and: 
+        //  4. Add all players into Glicko. If they played in a previous tournament do not add them, instead 
+        //  5. Get all sets from that tournament
+        //  6. Add all the matches to Glicko. 
+        //  7. Run calculations
+        //  8. If players from previous week did not play this week, apply the inactivity penalty. Only do this if the previous check was > 7 days ago.
+        //9. Update players with new ranking values. 
     }
 }
