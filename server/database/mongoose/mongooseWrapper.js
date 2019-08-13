@@ -27,8 +27,6 @@ module.exports = {
     
             Promise.all([winner, loser]);
 
-            console.log(winner);
-
             return await sets.addSet(set.id, {
                 setID: set.id,
                 eventID: eventID,
