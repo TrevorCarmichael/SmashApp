@@ -78,6 +78,7 @@ type Ranked_Players {
 }
 
 type Set {
+    setID: ID!
     eventID: ID!
     winnerID: String!
     loserID: String!

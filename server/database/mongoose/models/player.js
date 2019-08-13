@@ -20,4 +20,12 @@ playerSchema.statics.getByName = function(name) {
 playerSchema.statics.getByID = function(id) {
     return this.findById(id);
 }
+
+playerSchema.statics.addPlayer = function(name) {
+    return this.findOneAndUpdate(
+        {name_lower: name.toLowerCase()},
+        {name: name, name_lower: name.toLowerCase()},
+        {upsert: true, new: true});
+}
+
 module.exports = mongoose.model('player', playerSchema);

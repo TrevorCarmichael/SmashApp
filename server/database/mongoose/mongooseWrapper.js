@@ -6,81 +6,51 @@ const playerRankings = require('./models/player_rankings');
 const smashgg = require('../../smashgg/smashgg');
 const smash = new smashgg(process.env.SMASHGG);
 
-let getRecords = (model, func, args) => {
-    return new Promise(async (resolve, reject) => {
-        let thing = await func.apply(model, args);
-        resolve(thing);
-    });
-}
-let getPlayerByGamerTag = async (x) => await players.findOne({name: x});
-
 module.exports = {
     getAllTournaments: () => tournaments.getAll(),
     getTournament: (tournamentID, eventID, slug) => tournaments.getTournament(tournamentID, eventID, slug),
     getAllSets: () => sets.getAllSets(),
-    getRankingByID: (id) => getRecords(rankings, rankings.findById, [id]),
+    getRankingByID: (id) => rankings.getByID(id),
     getPlayersByNames: (names) => players.getPlayers(names),
     getPlayerByName: (name) => players.getByName(name),
     getPlayerByID: (id) => players.getByID(id),
     getPlayerRankingsByRankingID: (id) => playerRankings.getAllByID(id),
-    addTournament: (tournamentID, fields) => {
-        return getRecords(tournaments, tournaments.findOneAndUpdate,
-             [{tournamentID: tournamentID}, fields , {upsert: true, new: true}]);
-    },
+    addTournament: (tournamentID, fields) => tournaments.addTournament(tournamentID, fields),
     getSets: (eventID) => sets.getByID(eventID),
-    addPlayer: (name) => {
-        return getRecords(players, players.findOneAndUpdate, [
-            {name_lower: name.toLowerCase()},
-            {name: name, name_lower: name.toLowerCase()},
-            {upsert: true, new: true}
-        ]);
-    },
+    addPlayer: (name) => players.addPlayer(name),
     addSets: async (eventID) => {
         let eventSets = await smash.getEventSets(eventID);
+
         let addedSets = await Promise.all(eventSets.map(async (set) => {
-            let results = [];
-            let winner, loser;
+            let winner = await players.getByName(set.winner.entrant.participants[0].gamerTag);
+            let loser = await players.getByName(set.loser.entrant.participants[0].gamerTag);
     
-            winnerPromise = getPlayerByGamerTag(set.winner.entrant.participants[0].gamerTag).then((x) => {
-                winner = {
-                    playerID: x._id,
-                    name: x.name,
-                    score: set.winnerScore
-                 };
-                results.push(winner);
-            });
-    
-            loserPromise = getPlayerByGamerTag(set.loser.entrant.participants[0].gamerTag).then((x) => {
-                loser = {
-                    playerID: x._id,
-                    name: x.name,
-                    score: set.loserScore
-                 };
-                results.push(loser);
-            });
-    
-            await Promise.all([winnerPromise, loserPromise]);        
-    
-            return await sets.findOneAndUpdate({setID: set.id}, {
+            Promise.all([winner, loser]);
+
+            console.log(winner);
+
+            return await sets.addSet(set.id, {
                 setID: set.id,
                 eventID: eventID,
-                winnerID: winner.playerID,
-                loserID: loser.playerID,
+                winnerID: winner._id,
+                loserID: loser._id,
                 winnerName: winner.name,
                 loserName: loser.name,
                 DQ: set.DQ,
-                results: results
-            }, {upsert: true, new: true});
+                results: [{
+                    playerID: winner._id,
+                    name: winner.name,
+                    score: set.winnerScore
+                },{
+                    playerID: loser._id,
+                    name: loser.name,
+                    score: set.loserScore
+                }]
+            });
             
         }));
     
         return addedSets;
     },
-    addRanking: (name, startDate, endDate) => {
-        return getRecords(rankings, rankings.create, [{
-            name: name,
-            startDate: Date.parse(startDate),
-            endDate: Date.parse(endDate)
-        }]);
-    }
+    addRanking: (name, startDate, endDate) => rankings.addRanking(name, startDate, endDate)
 }

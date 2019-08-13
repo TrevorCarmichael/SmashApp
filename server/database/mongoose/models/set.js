@@ -23,4 +23,12 @@ setSchema.statics.getAllSets = function() {
 setSchema.statics.getByID = function(eventID){
     return this.find({eventID: eventID});
 }
+
+setSchema.statics.addSet = function(setID, fields) {
+    return this.findOneAndUpdate(
+        {setID: setID}, 
+        fields, 
+        {upsert: true, new: true});
+}
+
 module.exports = mongoose.model('set', setSchema);

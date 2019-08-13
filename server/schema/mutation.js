@@ -34,7 +34,7 @@ module.exports = {
         });
         return newTourn;
     },
-    addSets: (_, {eventID}) => {return addSets(eventID)},
+    addSets: (_, {eventID}) => database.addSets(eventID),
     addRanking:  (_, {name, startDate, endDate}) => {
         return database.addRanking(name, startDate, endDate);
     }

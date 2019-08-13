@@ -27,4 +27,10 @@ tournamentSchema.statics.getTournament = function(tournamentID, eventID, slug){
     return this.findOne(query);
 }
 
+tournamentSchema.statics.addTournament = function(tournamentID, fields){
+    return this.findOneAndUpdate(
+        {tournamentID: tournamentID}, 
+        fields, 
+        {upsert: true, new: true});
+}
 module.exports = mongoose.model('tournament', tournamentSchema);

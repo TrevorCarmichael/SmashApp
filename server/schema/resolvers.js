@@ -1,4 +1,4 @@
-const database = require('../database/database');
+//const database = require('../database/database');
 const query = require('./query');
 const mutation = require('./mutation');
 
