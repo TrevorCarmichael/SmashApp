@@ -66,14 +66,17 @@ type Player {
 type Ranking {
     id: String!,
     name: String!,
-    startDate: String!
-    endDate: String! 
+    startDate: Int!
+    endDate: Int! 
+    formattedStartDate: String!
+    formattedEndDate: String!
     players: [Ranked_Players]
 }
 
 type Ranked_Players {
     playerID: ID!
     name: String!
+    last_tournament: String!
     rating: Float!
     rating_deviation: Float!
     volatility: Float!

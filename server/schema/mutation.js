@@ -1,5 +1,6 @@
 const database = require('../database/database');
 const smashgg = require('../smashgg/smashgg');
+const glicko = require('glicko2-js');
 const smash = new smashgg(process.env.SMASHGG);
 
 module.exports = {
@@ -22,13 +23,15 @@ module.exports = {
         }));
 
         database.addSets(event.id);
-
+        let tempDate = new Date(tournament.startAt * 1000);
+        console.log(tempDate);
+        let tournamentDate = new Date(Date.UTC(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate()));
         let newTourn = database.addTournament(tournament.id, {
             tournamentID: tournament.id,
             eventID: event.id,
             eventName: event.name,
             name: tournament.name,
-            date: tournament.startAt,
+            date: tournamentDate.getTime()/1000,
             slug: tournament.slug,
             participants: updatedParticipants
         });
@@ -39,6 +42,8 @@ module.exports = {
         return database.addRanking(name, startDate, endDate);
     },
     calculateRanking: (_, id) => {
+        let ratings = new glicko(0.9);
+        
         //1. Get ranking from DB
         //2. Get tournaments that fall within date
         //3. Loop through each tournament and: 

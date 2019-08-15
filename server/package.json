@@ -13,6 +13,7 @@
     "apollo-server": "^2.7.0",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
+    "glicko2-js": "github:Googlrr/Glicko2-JS",
     "graphql": "^14.4.2",
     "mongoose": "^5.6.5",
     "node-fetch": "^2.6.0"

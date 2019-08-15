@@ -7,7 +7,8 @@ const playerRankingSchema = new Schema({
     name: String,
     rating: Number,
     rating_deviation: Number,
-    volatility: Number
+    volatility: Number,
+    last_tournament: String,
 });
 
 playerRankingSchema.statics.getAllByID = function(id) {

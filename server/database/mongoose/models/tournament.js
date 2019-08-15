@@ -6,7 +6,7 @@ const tournamentSchema = new Schema({
     eventID: String,
     eventName: String,
     name: String,
-    date: String,
+    date: Number,
     slug: String,
     participants: [{
         playerID: String,
@@ -32,5 +32,9 @@ tournamentSchema.statics.addTournament = function(tournamentID, fields){
         {tournamentID: tournamentID}, 
         fields, 
         {upsert: true, new: true});
+}
+
+tournamentSchema.statics.getTournamentsInRange = function(startDate, endDate){
+    
 }
 module.exports = mongoose.model('tournament', tournamentSchema);

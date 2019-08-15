@@ -2,6 +2,11 @@ const database = require('../database/database');
 const smashgg = require('../smashgg/smashgg');
 const smash = new smashgg(process.env.SMASHGG);
 
+let formatDate = (date) => {
+    let newDate = new Date(date*1000);
+    return `${newDate.getUTCFullYear()}-${newDate.getUTCMonth()+1}-${newDate.getUTCDate()}`;
+}
+
 exports.query = {
     tournaments: () => {
         return database.getAllTournaments();
@@ -51,8 +56,7 @@ exports.tournament = {
         return database.getSets(tournament.eventID);
     },
     formattedDate(tournament) {
-        let newDate = new Date(tournament.date*1000);
-        return newDate.toLocaleDateString();
+        return formatDate(tournament.date);
     }
 };
 
@@ -69,13 +73,12 @@ exports.ranking = {
     players (ranking) {
         return database.getPlayerRankingsByRankingID(ranking._id);
     },
-    startDate (ranking) {
-        let date = new Date(ranking.startDate);
-        return date.toDateString();
+    formattedStartDate (ranking) {
+        console.log(ranking.startDate);
+        return formatDate(ranking.startDate);
     },
-    endDate (ranking) {
-        let date = new Date(ranking.endDate);
-        return date.toDateString();
+    formattedEndDate (ranking){
+        return formatDate(ranking.endDate);
     }
 }
 

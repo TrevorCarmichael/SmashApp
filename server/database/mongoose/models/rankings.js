@@ -8,10 +8,15 @@ const rankingSchema = new Schema({
 });
 
 rankingSchema.statics.addRanking = function(name, startDate, endDate) {
+    let makeDate = (date) => {
+        let tempDate = new Date(date + "T23:00:00.000Z");
+        let UTCDate = new Date(Date.UTC(tempDate.getUTCFullYear(), tempDate.getUTCMonth(), tempDate.getUTCDate()));
+        return UTCDate.getTime();
+    }
     return this.create({
         name: name,
-        startDate: Date.parse(startDate),
-        endDate: Date.parse(endDate)
+        startDate: makeDate(startDate) / 1000,
+        endDate: makeDate(endDate) / 1000
     });
 };
 
