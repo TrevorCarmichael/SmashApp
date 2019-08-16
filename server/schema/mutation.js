@@ -43,16 +43,17 @@ module.exports = {
     },
     calculateRanking: async (_, { id }) => {
 
-        let ratings = new glicko(1.2);
+        let ratings = new glicko(0.6);
         console.log(ratings);
         let players = [];
 
         let ranking = await database.getRankingByID(id);
         let tournaments = await database.getTournamentsInRange(ranking.startDate, ranking.endDate);
-        tournaments = tournaments.sort((a,b) => a.startDate > b.startDate ? 1 : -1);
+        tournaments = tournaments.sort((a,b) => a.date > b.date ? 1 : -1);
         let sets = tournaments.map(async (tournament) => {
+            console.log(tournament.name);
+            console.log(tournament.date);
             let tournamentSets = await database.getSets(tournament.eventID);
-
             tournament.participants.forEach((player) => {
                 let existing = players.find((p) => p.name.toLowerCase() === player.name.toLowerCase());
                 if(existing === undefined){
@@ -84,7 +85,7 @@ module.exports = {
         let newPlayers = players.map((p) => {
             return {
                 name: p.name,
-                rating: (p.rating),
+                rating: (p.rating - (2 * p.rd)),
                 rd: p.rd,
                 vol: p.volatility
             }
