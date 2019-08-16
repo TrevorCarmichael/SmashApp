@@ -41,9 +41,59 @@ module.exports = {
     addRanking:  (_, {name, startDate, endDate}) => {
         return database.addRanking(name, startDate, endDate);
     },
-    calculateRanking: (_, id) => {
-        let ratings = new glicko(0.9);
-        
+    calculateRanking: async (_, { id }) => {
+
+        let ratings = new glicko(1.2);
+        console.log(ratings);
+        let players = [];
+
+        let ranking = await database.getRankingByID(id);
+        let tournaments = await database.getTournamentsInRange(ranking.startDate, ranking.endDate);
+        tournaments = tournaments.sort((a,b) => a.startDate > b.startDate ? 1 : -1);
+        let sets = tournaments.map(async (tournament) => {
+            let tournamentSets = await database.getSets(tournament.eventID);
+
+            tournament.participants.forEach((player) => {
+                let existing = players.find((p) => p.name.toLowerCase() === player.name.toLowerCase());
+                if(existing === undefined){
+                    players.push(ratings.formatPlayer(player.name));
+                }
+            });
+
+            return new Promise((resolve, reject) => resolve(tournamentSets));
+        });
+
+       
+        completeSets = await Promise.all(sets);
+        //console.log(players);
+        completeSets.forEach((tournament) => {
+            let formattedSets = [];
+            tournament.forEach((set) => {
+                
+                formattedSets.push([set.winnerName, set.loserName]);
+            });
+            let newPlayers = ratings.calculateRankings(players, formattedSets);
+            //console.log(newPlayers);
+            newPlayers.forEach((p) => {
+                let index = players.findIndex((x) => x.name === p.name);
+                players[index] = p;
+            });
+
+        });
+
+        let newPlayers = players.map((p) => {
+            return {
+                name: p.name,
+                rating: (p.rating),
+                rd: p.rd,
+                vol: p.volatility
+            }
+        }).sort((a,b) => a.rating > b.rating ? -1 : 1).forEach(x => {
+            console.log(`${x.rating}     -     ${x.name}     -     ${x.rd}     -     ${x.vol}`);
+        });
+        //console.log(newPlayers);
+        //console.log(completeSets);
+        //console.log(tournaments);
         //1. Get ranking from DB
         //2. Get tournaments that fall within date
         //3. Loop through each tournament and: 

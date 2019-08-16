@@ -35,6 +35,8 @@ tournamentSchema.statics.addTournament = function(tournamentID, fields){
 }
 
 tournamentSchema.statics.getTournamentsInRange = function(startDate, endDate){
-    
+    return this.find({
+        date: { $gte: startDate, $lte: endDate}
+    });
 }
 module.exports = mongoose.model('tournament', tournamentSchema);

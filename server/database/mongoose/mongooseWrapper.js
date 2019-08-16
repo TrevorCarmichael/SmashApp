@@ -53,5 +53,8 @@ module.exports = {
     
         return addedSets;
     },
-    addRanking: (name, startDate, endDate) => rankings.addRanking(name, startDate, endDate)
+    addRanking: (name, startDate, endDate) => rankings.addRanking(name, startDate, endDate),
+    getTournamentsInRange: (startDate, endDate) => {
+        return tournaments.getTournamentsInRange(startDate, endDate);
+    }
 }
