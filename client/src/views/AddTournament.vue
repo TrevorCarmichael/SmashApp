@@ -1,8 +1,11 @@
 <template>
     <v-stepper v-model="e1">
-        <v-snackbar v-model="snackbar">
+        <v-snackbar 
+          v-model="snackbar"
+          color="success"
+        >
           {{ snackText }}
-          <v-btn color="pink" text @click="snackbar = false">
+          <v-btn color="white" text @click="snackbar = false">
             Close
           </v-btn>
         </v-snackbar>
