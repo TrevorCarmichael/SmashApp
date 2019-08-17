@@ -48,8 +48,28 @@ exports.query = {
                 resolve(results);
             });
         });
+    },
+    event_seeds: (_, {eventID}) => {
+        return new Promise((resolve, reject) => {
+            smash.getEventSeed(eventID).then(results => {
+                resolve(results);
+            });
+        });
     }
 };
+
+exports.phase = {
+    players(phase){
+        return phase.seeds.nodes.map(x => {
+            console.log(x);
+            return {
+                id: x.id,
+                seedNum: x.seedNum,
+                name: x.players[0].gamerTag
+            }
+        }).sort((a,b) => a.seedNum < b.seedNum ? -1 : 1);
+    }
+}
 
 exports.tournament = {
     sets(tournament) {
@@ -82,10 +102,10 @@ exports.ranking = {
     }
 }
 
-exports.ranked_players = {
+/*exports.ranked_players = {
     final_ranking(ranked_players){
         console.log('test');
         console.log(ranked_players);
-        return 0;//ranked_players.rating - (2 * ranked_players.rating_deviation);
+        return 0;
     }
-}
+}*/

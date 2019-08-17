@@ -32,5 +32,11 @@ export default new Router({
       meta: { title: 'Add Tournament' },
       component: () => import('./views/AddTournament.vue'),
     },
+    {
+      path: '/seedtournament',
+      name: 'seedtournament',
+      meta: { title: 'Seed Tournament' },
+      component: () => import('./views/SeedTournament.vue'),
+    },
   ],
 });

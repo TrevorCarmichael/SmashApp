@@ -7,5 +7,6 @@ module.exports = {
     Mutation: mutation,
     Tournament: query.tournament,
     Placement: query.placement,
-    Ranking: query.ranking
+    Ranking: query.ranking,
+    Phase: query.phase
 };

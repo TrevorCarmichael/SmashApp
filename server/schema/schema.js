@@ -12,6 +12,7 @@ type Query {
     player(name: String!) : Player
     getParticipants(eventID: String!) : [Player]
     entrants_smashgg(eventID: Int!): [Entrant_SmashGG]
+    event_seeds(eventID: Int!) : [Phase]
 }
 
 type Mutation {
@@ -20,6 +21,19 @@ type Mutation {
     addRanking(name: String!, startDate: String!, endDate: String!) : Ranking
     registerTournamentEvent(tournamentSlug: String!, eventID: Int!): Tournament
     calculateRanking(id: String!) : Ranking
+}
+
+type Phase {
+    id: Int!
+    name: String!
+    numSeeds: Int
+    players: [EventSeed]
+}
+
+type EventSeed{
+    id: Int!
+    seedNum: Int!
+    name: String
 }
 
 type Tournament {

@@ -284,7 +284,7 @@ SmashGG.prototype.getEventSeed = async function getEventSeed(eventID, perPage = 
     let variables = () => `{
       "eventId": ${eventID},
       "page": 1,
-      "perPage": 50
+      "perPage": ${perPage}
     }`;
 
     
