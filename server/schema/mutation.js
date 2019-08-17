@@ -43,16 +43,15 @@ module.exports = {
     },
     calculateRanking: async (_, { id }) => {
 
-        let ratings = new glicko(0.6);
-        console.log(ratings);
+        let ratings = new glicko(0.9);
+
         let players = [];
 
         let ranking = await database.getRankingByID(id);
         let tournaments = await database.getTournamentsInRange(ranking.startDate, ranking.endDate);
         tournaments = tournaments.sort((a,b) => a.date > b.date ? 1 : -1);
         let sets = tournaments.map(async (tournament) => {
-            console.log(tournament.name);
-            console.log(tournament.date);
+
             let tournamentSets = await database.getSets(tournament.eventID);
             tournament.participants.forEach((player) => {
                 let existing = players.find((p) => p.name.toLowerCase() === player.name.toLowerCase());
@@ -66,43 +65,32 @@ module.exports = {
 
        
         completeSets = await Promise.all(sets);
-        //console.log(players);
+
         completeSets.forEach((tournament) => {
             let formattedSets = [];
             tournament.forEach((set) => {
-                
-                formattedSets.push([set.winnerName, set.loserName]);
+
+                formattedSets.push([set.winnerName.toLowerCase(), set.loserName.toLowerCase()]);
             });
+
             let newPlayers = ratings.calculateRankings(players, formattedSets);
-            //console.log(newPlayers);
+
             newPlayers.forEach((p) => {
-                let index = players.findIndex((x) => x.name === p.name);
+
+                let index = players.findIndex((x) => x.name.toLowerCase() === p.name.toLowerCase());
                 players[index] = p;
             });
 
         });
 
-        let newPlayers = players.map((p) => {
-            return {
-                name: p.name,
-                rating: (p.rating - (2 * p.rd)),
-                rd: p.rd,
-                vol: p.volatility
-            }
-        }).sort((a,b) => a.rating > b.rating ? -1 : 1).forEach(x => {
-            console.log(`${x.rating}     -     ${x.name}     -     ${x.rd}     -     ${x.vol}`);
+        playerNames = players.map(x => x.name);
+        playersFromDB = await database.getPlayersByNames(playerNames);
+        
+        players.forEach(async x => {
+            let tempPlayer = playersFromDB.find(p => p.name_lower === x.name.toLowerCase());
+            let result = await database.updatePlayerRanking(tempPlayer._id, tempPlayer.name, id, x.rating, x.rd, x.volatility);
         });
-        //console.log(newPlayers);
-        //console.log(completeSets);
-        //console.log(tournaments);
-        //1. Get ranking from DB
-        //2. Get tournaments that fall within date
-        //3. Loop through each tournament and: 
-        //  4. Add all players into Glicko. If they played in a previous tournament do not add them, instead 
-        //  5. Get all sets from that tournament
-        //  6. Add all the matches to Glicko. 
-        //  7. Run calculations
-        //  8. If players from previous week did not play this week, apply the inactivity penalty. Only do this if the previous check was > 7 days ago.
-        //9. Update players with new ranking values. 
+
+        return ranking;
     }
 }

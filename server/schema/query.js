@@ -84,6 +84,8 @@ exports.ranking = {
 
 exports.ranked_players = {
     final_ranking(ranked_players){
-        return ranked_players.ranking - (2*ranked_players.rating_deviation);
+        console.log('test');
+        console.log(ranked_players);
+        return 0;//ranked_players.rating - (2 * ranked_players.rating_deviation);
     }
 }

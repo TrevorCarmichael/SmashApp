@@ -16,12 +16,15 @@ playerRankingSchema.statics.getAllByID = function(id) {
 }
 
 playerRankingSchema.statics.updatePlayer = function(playerID, name, rankingID, rating, rating_deviation, volatility) {
+    console.log(playerID);
+    console.log(rankingID);
+    
     return this.findOneAndUpdate({
         playerID: playerID,
         rankingID: rankingID
     },{
         playerID: playerID,
-        playerName: name,
+        name: name,
         rankingID: rankingID,
         rating: rating,
         rating_deviation: rating_deviation, 
@@ -34,13 +37,18 @@ playerRankingSchema.statics.createNewRanking = function(playerID, playerName, ra
     let ratingFields = {rating: 1500, rating_deviation: 200, volatility: 0.06};
     if(fields) {ratingFields = fields}
 
-    return this.create({
+    console.log("test");
+    return this.findOneAndUpdate({
+        rankingID: rankingID,
+        playerID: playerID
+    },{
         rankingID: rankingID,
         playerID: playerID,
         name: playerName,
-        rating: fields.rating,
-        rating_deviation: fields.rating_deviation,
+        rating: ratingFields.rating,
+        rating_deviation: ratingFields.rating_deviation,
         volatility: ratingFields.volatility
-    });
+    },{upsert: true, new: true});
+
 }
 module.exports = mongoose.model('playerRanking', playerRankingSchema);
