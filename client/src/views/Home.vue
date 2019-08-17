@@ -1,5 +1,5 @@
 <template>
-  <p></p>
+  <p>There's nothing here I'm not really sure why I added this page</p>
 </template>
 
 <script>

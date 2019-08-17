@@ -16,8 +16,6 @@ playerRankingSchema.statics.getAllByID = function(id) {
 }
 
 playerRankingSchema.statics.updatePlayer = function(playerID, name, rankingID, rating, rating_deviation, volatility) {
-    console.log(playerID);
-    console.log(rankingID);
     
     return this.findOneAndUpdate({
         playerID: playerID,
@@ -36,8 +34,7 @@ playerRankingSchema.statics.updatePlayer = function(playerID, name, rankingID, r
 playerRankingSchema.statics.createNewRanking = function(playerID, playerName, rankingID, fields) {
     let ratingFields = {rating: 1500, rating_deviation: 200, volatility: 0.06};
     if(fields) {ratingFields = fields}
-
-    console.log("test");
+    
     return this.findOneAndUpdate({
         rankingID: rankingID,
         playerID: playerID

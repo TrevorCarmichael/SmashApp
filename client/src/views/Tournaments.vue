@@ -4,7 +4,7 @@
             <v-list-item v-for="tournament in tournaments" v-bind:key="tournament.id">
                 <v-list-item-content>
                     <v-list-item-title v-text="tournament.name"></v-list-item-title>
-                    <v-list-item-subtitle>{{formatDate(tournament.date)}}</v-list-item-subtitle>
+                    <v-list-item-subtitle>{{tournament.formattedDate}}</v-list-item-subtitle>
                 </v-list-item-content>
             </v-list-item>
         </v-list-item-group>
@@ -22,15 +22,15 @@ export default {
     console.log(`hi ${process.env.VUE_APP_ENDPOINT}`);
 
     queryAPI(`
-      query tournament {
-          tournaments {
-              name
-              id
-              date
-          }
+      query gettourn {
+        tournaments{
+          name
+          date
+          formattedDate
+        }
       }
       `).then((response) => {
-      this.tournaments = response.tournaments;
+      this.tournaments = response.tournaments.sort((a,b) => a.date < b.date ? 1 : -1);
     });
   },
   data() {
@@ -39,10 +39,7 @@ export default {
     };
   },
   methods: {
-    formatDate: (date) => {
-      const tempDate = new Date(date * 1000);
-      return tempDate.toDateString();
-    },
+
   },
 };
 </script>
