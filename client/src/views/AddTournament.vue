@@ -1,5 +1,11 @@
 <template>
     <v-stepper v-model="e1">
+        <v-snackbar v-model="snackbar">
+          {{ snackText }}
+          <v-btn color="pink" text @click="snackbar = false">
+            Close
+          </v-btn>
+        </v-snackbar>
         <v-stepper-header>
             <v-stepper-step :complete="e1 > 1" step="1">Select Tournament</v-stepper-step>
             <v-divider></v-divider>
@@ -67,7 +73,9 @@ export default {
       selectedEvent: '',
       entrants: [], 
       existingPlayers: [],
-      missingPlayers: []
+      missingPlayers: [],
+      snackbar: false,
+      snackText: "",
     };
   },
   methods: {
@@ -133,7 +141,9 @@ export default {
             eventID
           }
         }`).then((results) => {
-          console.log(results);
+          this.snackText = "Tournament Added Successfully!"
+          this.snackbar = true;
+          this.e1 = 1;
         });
     }
   },

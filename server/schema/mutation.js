@@ -90,7 +90,7 @@ module.exports = {
             let tempPlayer = playersFromDB.find(p => p.name_lower === x.name.toLowerCase());
             let result = await database.updatePlayerRanking(tempPlayer._id, tempPlayer.name, id, x.rating, x.rd, x.volatility);
         });
-
+        
         return ranking;
     }
 }
