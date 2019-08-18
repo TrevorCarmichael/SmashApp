@@ -14,9 +14,9 @@
             <v-divider></v-divider>
             <v-stepper-step :complete="e1 > 2" step="2">Select Event</v-stepper-step>
             <v-divider></v-divider>
-            <v-stepper-step step="3">Select Phase</v-stepper-step>
+            <v-stepper-step :complete="e1 > 3" step="3">Select Phase</v-stepper-step>
             <v-divider></v-divider>
-            <v-stepper-step step="4">Set Seeding</v-stepper-step>
+            <v-stepper-step :complete="e1 > 4" step="4">Set Seeding</v-stepper-step>
         </v-stepper-header>
 
         <v-stepper-items>
