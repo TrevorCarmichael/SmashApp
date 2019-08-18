@@ -4,12 +4,17 @@ I created this app for the purpose of having an easier time seeding local tourna
 
 ## Different Technologies used
 
-Vue (Client)
-Vuetify (Client)
-Express (Web Server)
-Apollo Server/GraphQL (API)
-Mongoose/MongoDB (DB)
-Glicko 2 algorithm for ranking (Code by Me, see Glicko2-JS repository. Algorithm from http://www.glicko.net/glicko.html)
+- Vue (Client)
+
+- Vuetify (Client)
+
+- Express (Web Server)
+
+- Apollo Server/GraphQL (API)
+
+- Mongoose/MongoDB (DB)
+
+- Glicko 2 algorithm for ranking (Code by Me, see Glicko2-JS repository. Algorithm from http://www.glicko.net/glicko.html)
 
 
 ## Future plans for project
