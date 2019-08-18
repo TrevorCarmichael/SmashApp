@@ -41,6 +41,10 @@
           <v-list-item-icon></v-list-item-icon>
           <v-list-item-title>Add Tournaments</v-list-item-title>
         </v-list-item>
+        <v-list-item to="/SeedTournament">
+          <v-list-item-icon></v-list-item-icon>
+          <v-list-item-title>Seed Tournament</v-list-item-title>
+        </v-list-item>
       </v-list-group>
     </v-list>
   </v-navigation-drawer>

@@ -21,8 +21,17 @@ type Mutation {
     addRanking(name: String!, startDate: String!, endDate: String!) : Ranking
     registerTournamentEvent(tournamentSlug: String!, eventID: Int!): Tournament
     calculateRanking(id: String!) : Ranking
+    seedTournament(phaseID: Int!, seeds: String!) : Message
 }
 
+input Seed{
+    seedId: Int!
+    seedNum: Int!
+}
+
+type Message{
+    result: String!
+}
 type Phase {
     id: Int!
     name: String!

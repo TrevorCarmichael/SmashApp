@@ -30,7 +30,7 @@ export default {
         }
       }
       `).then((response) => {
-      this.tournaments = response.tournaments.sort((a,b) => a.date < b.date ? 1 : -1);
+      this.tournaments = response.tournaments.sort((a, b) => (a.date < b.date ? 1 : -1));
     });
   },
   data() {

@@ -61,7 +61,6 @@ exports.query = {
 exports.phase = {
     players(phase){
         return phase.seeds.nodes.map(x => {
-            console.log(x);
             return {
                 id: x.id,
                 seedNum: x.seedNum,
@@ -94,7 +93,6 @@ exports.ranking = {
         return database.getPlayerRankingsByRankingID(ranking._id);
     },
     formattedStartDate (ranking) {
-        console.log(ranking.startDate);
         return formatDate(ranking.startDate);
     },
     formattedEndDate (ranking){

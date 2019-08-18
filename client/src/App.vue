@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <smashNavigation/>
-    
+
     <v-content>
       <v-container>
         <router-view />

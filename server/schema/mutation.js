@@ -24,7 +24,6 @@ module.exports = {
 
         database.addSets(event.id);
         let tempDate = new Date(tournament.startAt * 1000);
-        console.log(tempDate);
         let tournamentDate = new Date(Date.UTC(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate()));
         let newTourn = database.addTournament(tournament.id, {
             tournamentID: tournament.id,
@@ -92,5 +91,16 @@ module.exports = {
         });
         
         return ranking;
+    },
+    seedTournament: (_, {phaseID, seeds}) => {
+        let seeding = JSON.parse(seeds);
+        let structuredSeeds = seeding.map((x,i) => {
+            return {
+                "seedId": x,
+                "seedNum": i+1
+            }
+        });
+        smash.updatePhaseSeeding(phaseID, JSON.stringify(structuredSeeds));
+        return {result: "Yeah it worked"};
     }
 }

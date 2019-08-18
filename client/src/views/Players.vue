@@ -22,14 +22,14 @@ export default {
   components: {
 
   },
-  data(){
-    return{
+  data() {
+    return {
       rankings: [],
-      selectedRanking: "",
-      players: []
-    }
+      selectedRanking: '',
+      players: [],
+    };
   },
-  created(){
+  created() {
     queryAPI(`
       query rank{
         rankings{
@@ -40,7 +40,7 @@ export default {
         }
       }
     `).then((results) => {
-        this.rankings = results.rankings;
+      this.rankings = results.rankings;
     });
   },
   methods: {
@@ -57,14 +57,12 @@ export default {
           }
         }
       `).then((results) => {
-        this.players = results.ranking.players.map(p => {
-          return {
-            name: p.name,
-            rating: p.rating - (2 * p.rating_deviation)
-          }
-        }).sort((a,b) => a.rating < b.rating ? 1 : -1);
+        this.players = results.ranking.players.map(p => ({
+          name: p.name,
+          rating: p.rating - (2 * p.rating_deviation),
+        })).sort((a, b) => (a.rating < b.rating ? 1 : -1));
       });
-    }
-  }
+    },
+  },
 };
 </script>
