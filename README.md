@@ -14,7 +14,7 @@ I created this app for the purpose of having an easier time seeding local tourna
 
 - Mongoose/MongoDB (DB)
 
-- Glicko 2 algorithm for ranking (Code by Me, see Glicko2-JS repository. Algorithm from http://www.glicko.net/glicko.html)
+- Glicko 2 algorithm for ranking (Code by Me https://github.com/Googlrr/Glicko2-JS, Algorithm from http://www.glicko.net/glicko.html)
 
 
 ## Future plans for project
