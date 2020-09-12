@@ -17,6 +17,6 @@
     "glicko2-js": "github:Googlrr/Glicko2-JS",
     "graphql": "^14.4.2",
     "mongoose": "^5.6.9",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.1"
   }
 }
